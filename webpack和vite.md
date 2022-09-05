@@ -1,6 +1,6 @@
 # Webpack
 
-## webpack 是什么？
+## ⚝webpack 是什么？
 
 `webpack` 是一个现代 `JavaScript` 应用程序的**静态模块打包器**，当 `webpack` 处理应用程序时，会递归构建一个依赖关系图，其中包含应用程序需要的每个模块，然后将这些模块打包成一个或多个 `bundle`。
 
@@ -113,7 +113,7 @@ module.exports = {
 
 > Babel 是一个 JavaScript 编译器。
 
-　　用通俗的话解释就是它主要用于将高版本的JavaScript代码转为向后兼容的JS代码，从而能让我们的代码运行在更低版本的浏览器或者其他的环境中。
+　　用通俗的话解释就是它主要用于**将高版本的JavaScript代码转为向后兼容的JS代码**，从而能让我们的代码运行在更低版本的浏览器或者其他的环境中。
 
 ### Babel原理
 
@@ -286,11 +286,11 @@ console.log('hello world')
 
 可以看到输出的代码是个IIFE（立即执行函数），可以简化如下：
 
-**简化打包后文件**
+### ⚝简化打包后文件分析
 
 由于打包后的文件比较繁琐， 这里我们简化一下打包后的文件
 
-```
+```js
 (function(modules) {
     var installedModules = {}
     function __webpack_require__(moduleIid) {
@@ -299,9 +299,9 @@ console.log('hello world')
     return __webpack_require__(__webpack_require__.s = "./src/index.js")
 })({
     "./src/index.js": (function(module, exports) {
-                            eval("console.log('test webpack entry')");
+    eval("console.log('test webpack entry')");
                     })
-})
+   })
 ```
 
 从上面的代码可以看到，
@@ -313,7 +313,7 @@ console.log('hello world')
 
 **`__webpack_require__` 分析**
 
-```
+```js
 function (modules) {
     var installedModules = {}
 
@@ -508,9 +508,9 @@ module.exports = {
 }
 ```
 
-`sourceMap`是一项将编译、打包、压缩后的代码映射回源代码的技术，由于打包压缩后的代码并没有阅读性可言，一旦在开发中报错或者遇到问题，直接在混淆代码中`debug`问题会带来非常糟糕的体验，`sourceMap`可以帮助我们快速定位到源代码的位置，提高我们的开发效率。`sourceMap`其实并不是`Webpack`特有的功能，而是`Webpack`支持`sourceMap`，像`JQuery`也支持`souceMap`。
+`sourceMap`是一项将编译、打包、压缩后的**代码映射回源代码**的技术，由于打包压缩后的代码并没有阅读性可言，一旦在开发中报错或者遇到问题，直接在混淆代码中`debug`问题会带来非常糟糕的体验，`sourceMap`可以帮助我们快速定位到源代码的位置，提高我们的开发效率。`sourceMap`其实并不是`Webpack`特有的功能，而是`Webpack`支持`sourceMap`，像`JQuery`也支持`souceMap`。
 
-既然是一种源码的映射，那必然就需要有一份映射的文件，来标记混淆代码里对应的源码的位置，通常这份映射文件以`.map`结尾，里边的数据结构大概长这样：
+既然是一种源码的映射，那必然就需要有一份映射的文件，来**标记混淆代码里对应的源码的位置**，通常这份映射文件以`.map`结尾，里边的数据结构大概长这样：
 
 ```js
 {
@@ -565,19 +565,9 @@ Webpack 4 之后编译过程大致上可以拆解为四个阶段
 
 默认规则集中在 `compilation.seal` 函数实现，seal 核心逻辑运行结束后会生成一系列的 `Chunk`、`ChunkGroup`、`ChunkGraph` 对象，后续如 `SplitChunksPlugin` 插件会在 `Chunk` 系列对象上做进一步的拆解、优化，最终反映到输出上才会表现出复杂的分包结果。
 
-## Loader和Plugin的区别
-
-`Loader` 本质就是一个函数，在该函数中对接收到的内容进行转换，返回转换后的结果。 因为 Webpack 只认识 JavaScript，所以 Loader 就成了翻译官，对其他类型的资源进行转译的预处理工作。
-
-`Plugin` 就是插件，基于事件流框架 `Tapable`，插件可以扩展 Webpack 的功能，在 Webpack 运行的生命周期中会广播出许多事件，Plugin 可以监听这些事件，在合适的时机通过 Webpack 提供的 API 改变输出结果。
-
-`Loader` 在 module.rules 中配置，作为模块的解析规则，类型为数组。每一项都是一个 Object，内部包含了 test(类型文件)、loader、options (参数)等属性。
-
-`Plugin` 在 plugins 中单独配置，类型为数组，每一项是一个 Plugin 的实例，参数都通过构造函数传入。
-
 ## 是否写过Loader？简单描述一下编写loader的思路？
 
-从上面的打包代码我们其实可以知道，`Webpack`最后打包出来的成果是一份`Javascript`代码，实际上在`Webpack`内部默认也只能够处理`JS`模块代码，在打包过程中，会默认把所有遇到的文件都当作 `JavaScript`代码进行解析，因此当项目存在非`JS`类型文件时，我们需要先对其进行必要的转换，才能继续执行打包任务，这也是`Loader`机制存在的意义。
+从上面的打包代码我们其实可以知道，`Webpack`最后打包出来的成果是一份`Javascript`代码，实际上在`Webpack`内部默认也只能够处理`JS`模块代码，在打包过程中，会默认把所有遇到的文件都当作 `JavaScript`代码进行解析，因此当项目存在非`JS`类型文件时，我们需要先对其进行**必要的转换**，才能继续执行打包任务，这也是`Loader`机制存在的意义。
 
 `Loader`的配置使用我们应该已经非常的熟悉：
 
@@ -605,9 +595,9 @@ module.exports = {
 
 通过配置可以看出，针对每个文件类型，`loader`是支持以数组的形式配置多个的，因此当`Webpack`在转换该文件类型的时候，会按顺序**链式调用**每一个`loader`，前一个`loader`返回的内容会作为下一个`loader`的入参。因此`loader`的开发需要遵循一些规范，比如返回值必须是标准的`JS`代码字符串，以保证下一个`loader`能够正常工作，同时在开发上需要严格遵循“单一职责”，**只关心`loader`的输出以及对应的输出**。
 
-### 同步loader
+### ⚝同步loader
 
-　　loader默认导出一个函数，接受匹配到的文件资源字符串和SourceMap，我们可以修改文件内容字符串后再返回给下一个loader进行处理，因此最简单的一个loader如下：
+　　loader默认导出一个**函数**，接受匹配到的文件资源字符串和SourceMap，我们可以修改文件内容字符串后再返回给下一个loader进行处理，因此最简单的一个loader如下：
 
 ```js
 module.exports = function(source, map){
@@ -692,9 +682,9 @@ module.exports = loader;
 
 详细： https://juejin.cn/post/6888936770692448270#heading-8
 
-如果说`Loader`负责文件转换，那么`Plugin`便是负责功能扩展。`Loader`和`Plugin`作为`Webpack`的两个重要组成部分，承担着两部分不同的职责。
+**如果说Loader负责文件转换，那么Plugin便是负责功能扩展**。`Loader`和`Plugin`作为`Webpack`的两个重要组成部分，承担着两部分不同的职责。
 
-上文已经说过，`webpack`基于**发布订阅模式**，在运行的生命周期中会广播出许多事件，插件通过监听这些事件，就可以在特定的阶段执行自己的插件任务，从而实现自己想要的功能。
+上文已经说过，`webpack`基于**发布订阅模式**，**在运行的生命周期中会广播出许多事件，插件通过监听这些事件，就可以在特定的阶段执行自己的插件任务，从而实现自己想要的功能。**
 
 既然基于发布订阅模式，那么知道`Webpack`到底提供了哪些事件钩子供插件开发者使用是非常重要的，上文提到过`compiler`和`compilation`是`Webpack`两个非常核心的对象，其中`compiler`暴露了和 `Webpack`整个生命周期相关的钩子（[compiler-hooks](https://link.juejin.cn?target=https%3A%2F%2Fwebpack.js.org%2Fapi%2Fcompiler-hooks%2F)），而`compilation`则暴露了与模块和依赖有关的粒度更小的事件钩子（[Compilation Hooks](https://link.juejin.cn?target=https%3A%2F%2Fwebpack.js.org%2Fapi%2Fcompilation-hooks%2F)）。
 
@@ -725,7 +715,7 @@ myCar.hooks.brake.tap("WarningLampPlugin", () => warningLamp.on());
 
 `Plugin`的开发和开发`Loader`一样，需要遵循一些开发上的规范和原则：
 
-- 插件必须是一个函数或者是一个包含 `apply` 方法的对象，这样才能访问`compiler`实例；
+- **插件必须是一个函数或者是一个包含 `apply` 方法的对象，这样才能访问`compiler`实例**；
 - 传给每个插件的 `compiler` 和 `compilation` 对象都是同一个引用，若在一个插件中修改了它们身上的属性，会影响后面的插件;
 - 异步的事件需要在插件处理完任务时调用回调函数通知 `Webpack` 进入下一个流程，不然会卡住;
 
@@ -745,7 +735,15 @@ class MyPlugin {
 }
 ```
 
+## ⚝Loader和Plugin的区别
 
+`Loader` **本质就是一个函数**，在该函数中对接收到的内容进行转换，返回转换后的结果。 因为 Webpack 只认识 JavaScript，所以 Loader 就成了翻译官，对其他类型的资源进行转译的预处理工作。
+
+`Plugin` **就是插件**，基于事件流框架 `Tapable`，插件可以扩展 Webpack 的功能，**在 Webpack 运行的生命周期中会广播出许多事件，Plugin 可以监听这些事件，在合适的时机通过 Webpack 提供的 API 改变输出结果。**
+
+`Loader` 在 module.rules 中配置，作为模块的解析规则，类型为数组。每一项都是一个 Object，内部包含了 test(类型文件)、loader、options (参数)等属性。
+
+`Plugin` 在 plugins 中单独配置，类型为数组，每一项是一个 Plugin 的实例，参数都通过构造函数传入。
 
 ## Webpack 的热更新原理
 
@@ -784,9 +782,9 @@ module.exports = {
   - 不一致则通过`ajax`和`jsonp`向服务端获取最新资源
 - 使用`内存文件系统`去替换有修改的内容实现局部刷新
 
+### ⚝总结
 
-
-HMR的核心就是客户端从服务端拉去更新后的文件，准确的说是 chunk diff (chunk 需要更新的部分)，实际上 WDS 与浏览器之间维护了一个 `Websocket`，当本地资源发生变化时，WDS 会向浏览器推送更新，并带上构建时的 hash，让客户端与上一次资源进行对比。客户端对比出差异后会向 WDS 发起 `Ajax` 请求来获取更改内容(文件列表、hash)，这样客户端就可以再借助这些信息继续向 WDS 发起 `jsonp` 请求获取该chunk的增量更新。
+HMR的核心就是客户端从服务端拉去更新后的文件，准确的说是 **chunk diff** (chunk 需要更新的部分)，**实际上 WDS 与浏览器之间维护了一个 Websocket，当本地资源发生变化时，WDS 会向浏览器推送更新，并带上构建时的 hash，让客户端与上一次资源进行对比。**客户端对比出差异后会向 WDS **发起 Ajax 请求来获取更改内容**(文件列表、hash)，这样客户端就可以再借助这些信息继续向 WDS 发起 `jsonp` 请求获取该chunk的增量更新。
 
 后续的部分(拿到增量更新之后如何处理？哪些状态该保留？哪些又需要更新？)由 `HotModulePlugin` 来完成，提供了相关 API 以供开发者针对自身场景进行处理，像`react-hot-loader` 和 `vue-loader` 都是借助这些 API 实现 HMR。
 
@@ -838,11 +836,15 @@ HMR的核心就是客户端从服务端拉去更新后的文件，准确的说�
 
 ## 有哪些常见的Plugin？你用过哪些Plugin？
 
+**webpack-bundle-analyzer**： 可视化 Webpack 输出文件的体积 (业务组件、依赖第三方模块)
+
+**babel-plugin-component**:按需引入
+
 `define-plugin`：定义环境变量 (Webpack4 之后指定 mode 会自动配置)
 
-`ignore-plugin`：忽略部分文件
+**ignore-plugin**：忽略部分文件
 
-`html-webpack-plugin`：简化 HTML 文件创建 (依赖于 html-loader)
+**html-webpack-plugin**：简化 HTML 文件创建 (依赖于 html-loader)
 
 `web-webpack-plugin`：可方便地为单页应用输出 HTML，比 html-webpack-plugin 好用
 
@@ -862,7 +864,90 @@ HMR的核心就是客户端从服务端拉去更新后的文件，准确的说�
 
 `speed-measure-webpack-plugin`: 可以看到每个 Loader 和 Plugin 执行耗时 (整个打包耗时、每个 Plugin 和 Loader 耗时)
 
-`webpack-bundle-analyzer`: 可视化 Webpack 输出文件的体积 (业务组件、依赖第三方模块)
+## 文件指纹是什么？怎么用？(hash)
+
+文件指纹是打包后输出的文件名的后缀。
+
+- `Hash`：和整个项目的构建相关，只要**项目文件**有修改，整个项目构建的 hash 值就会更改
+- `Chunkhash`：和 Webpack 打包的 **chunk** 有关，不同的 entry 会生出不同的 chunkhash
+- `Contenthash`：根据**文件内容**来定义 hash，文件内容不变，则 contenthash 不变
+
+### JS的文件指纹设置
+
+设置 output 的 filename，用 chunkhash。
+
+```css
+module.exports = {
+    entry: {
+        app: './scr/app.js',
+        search: './src/search.js'
+    },
+    output: {
+        filename: '[name][chunkhash:8].js',
+        path:__dirname + '/dist'
+    }
+}
+复制代码
+```
+
+### CSS的文件指纹设置
+
+设置 MiniCssExtractPlugin 的 filename，使用 contenthash。
+
+```css
+module.exports = {
+    entry: {
+        app: './scr/app.js',
+        search: './src/search.js'
+    },
+    output: {
+        filename: '[name][chunkhash:8].js',
+        path:__dirname + '/dist'
+    },
+    plugins:[
+        new MiniCssExtractPlugin({
+            filename: `[name][contenthash:8].css`
+        })
+    ]
+}
+```
+
+### 图片的文件指纹设置
+
+设置file-loader的name，使用hash。
+
+占位符名称及含义
+
+- ext 资源后缀名
+- name 文件名称
+- path 文件的相对路径
+- folder 文件所在的文件夹
+- contenthash 文件的内容hash，默认是md5生成
+- hash 文件内容的hash，默认是md5生成
+- emoji 一个随机的指代文件内容的emoj
+
+```css
+const path = require('path');
+
+module.exports = {
+    entry: './src/index.js',
+    output: {
+        filename:'bundle.js',
+        path:path.resolve(__dirname, 'dist')
+    },
+    module:{
+        rules:[{
+            test:/\.(png|svg|jpg|gif)$/,
+            use:[{
+                loader:'file-loader',
+                options:{
+                    name:'img/[name][hash:8].[ext]'
+                }
+            }]
+        }]
+    }
+}
+```
 
 ## 体积优化策略
 
@@ -903,9 +988,102 @@ webpack中最耗时的就是loader的转换过程，转换的流程很长。happ
 
 ## webpack性能优化
 
-看pdf（大前端面试小册）
+- 使用`高版本`的 Webpack 和 Node.js
+- `多进程/多实例构建`：HappyPack(不维护了)、thread-loader
+- `压缩代码`
+  - 多进程并行压缩
+    - webpack-paralle-uglify-plugin
+    - uglifyjs-webpack-plugin 开启 parallel 参数 (不支持ES6)
+    - terser-webpack-plugin 开启 parallel 参数
+  - 通过 mini-css-extract-plugin 提取 Chunk 中的 CSS 代码到单独文件，通过 css-loader 的 minimize 选项开启 cssnano 压缩 CSS。
+- `图片压缩`
+  - 使用基于 Node 库的 imagemin (很多定制选项、可以处理多种图片格式)
+  - 配置 image-webpack-loader
+- `缩小打包作用域`：
+  - exclude/include (确定 loader 规则范围)
+  - resolve.modules 指明第三方模块的绝对路径 (减少不必要的查找)
+  - resolve.mainFields 只采用 main 字段作为入口文件描述字段 (减少搜索步骤，需要考虑到所有运行时依赖的第三方模块的入口文件描述字段)
+  - resolve.extensions 尽可能减少后缀尝试的可能性
+  - noParse 对完全不需要解析的库进行忽略 (不去解析但仍会打包到 bundle 中，注意被忽略掉的文件里不应该包含 import、require、define 等模块化语句)
+  - IgnorePlugin (完全排除模块)
+  - 合理使用alias
+- `提取页面公共资源`：
+  - 基础包分离：
+    - 使用 html-webpack-externals-plugin，将基础包通过 CDN 引入，不打入 bundle 中
+    - 使用 SplitChunksPlugin 进行(公共脚本、基础包、页面公共文件)分离(Webpack4内置) ，替代了 CommonsChunkPlugin 插件
+- `DLL`：
+  - 使用 DllPlugin 进行分包，使用 DllReferencePlugin(索引链接) 对 manifest.json 引用，让一些基本不会改动的代码先打包成静态资源，避免反复编译浪费时间。
+  - HashedModuleIdsPlugin 可以解决模块数字id问题
+- `充分利用缓存提升二次构建速度`：
+  - babel-loader 开启缓存
+  - terser-webpack-plugin 开启缓存
+  - 使用 cache-loader 或者 hard-source-webpack-plugin
+- `Tree shaking`
+  - 打包过程中检测工程中没有引用过的模块并进行标记，在资源压缩时将它们从最终的bundle中去掉(只能对ES6 Modlue生效) 开发中尽可能使用ES6 Module的模块，提高tree shaking效率
+  - 禁用 babel-loader 的模块依赖解析，否则 Webpack 接收到的就都是转换过的 CommonJS 形式的模块，无法进行 tree-shaking
+  - 使用 PurifyCSS(不在维护) 或者 uncss 去除无用 CSS 代码
+    - purgecss-webpack-plugin 和 mini-css-extract-plugin配合使用(建议)
+- `Scope hoisting`
+  - 构建后的代码会存在大量闭包，造成体积增大，运行代码时创建的函数作用域变多，内存开销变大。Scope hoisting 将所有模块的代码按照引用顺序放在一个函数作用域里，然后适当的重命名一些变量以防止变量名冲突
+  - 必须是ES6的语法，因为有很多第三方库仍采用 CommonJS 语法，为了充分发挥 Scope hoisting 的作用，需要配置 mainFields 对第三方模块优先采用 jsnext:main 中指向的ES6模块化语法
+- `动态Polyfill`
+  - 建议采用 polyfill-service 只给用户返回需要的polyfill，社区维护。 (部分国内奇葩浏览器UA可能无法识别，但可以降级返回所需全部polyfill)
 
 
+
+## webpack搭建多页面
+
+
+
+#### 配置文件配置
+
+**多入口配置 多个键值对**
+
+```javascript
+module.exports = {
+  entry: {
+    page1: "./src/pages/page1/index.jsx",
+    page2: "./src/pages/page2/index.jsx",
+    // ...
+  },
+};
+```
+
+**输出配置 path.resolve**
+
+```javascript
+module.exports = {
+  entry: {
+    page1: "./src/pages/page1/index.jsx",
+    page2: "./src/pages/page2/index.jsx",
+    // ...
+  },
+  output: {
+    path: path.resolve(__dirname, "./dist"),
+    filename: "[name]/index.js",
+  },
+};
+```
+
+**配置多个 html-webpack-plugin，指定chunks**
+
+```js
+module.exports = {
+  ...
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'page1/index.html',
+      chunks: ['page1']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'page2/index.html',
+      chunks: ['page2']
+    }),
+  ],
+}
+```
+
+#### 每个页面分别编辑
 
 
 
@@ -925,6 +1103,10 @@ webpack中最耗时的就是loader的转换过程，转换的流程很长。happ
 
 [我曾为配置 webpack 感到痛不欲生，直到我遇到了 webpack-chain](https://juejin.cn/post/6950076780669566983)
 
+
+
+
+
 # Vite
 
 ## 当前工程化痛点
@@ -940,7 +1122,7 @@ webpack中最耗时的就是loader的转换过程，转换的流程很长。happ
 
 ------
 
-## 什么是Vite？
+## ⚝什么是Vite？
 
 **基于esbuild与Rollup，依靠浏览器自身ESM编译功能， 实现极致开发体验的新一代构建工具！**
 
@@ -948,8 +1130,8 @@ webpack中最耗时的就是loader的转换过程，转换的流程很长。happ
 
 先介绍以下文中会经常提到的一些基础概念：
 
-- **依赖：** 指开发不会变动的部分(npm包、UI组件库)，esbuild进行预构建。esbuild 使用 Go 编写，并且比以 JavaScript 编写的打包器预构建依赖快 10-100 倍；
-- **源码：** 浏览器不能直接执行的非js代码(.jsx、.css、.vue等)，vite只在浏览器请求相关源码的时候进行转换，以提供ESM源码。
+- **依赖：** 指开发不会变动的部分(npm包、UI组件库)，**esbuild进行预构建**。esbuild 使用 **Go 编写**，并且比以 JavaScript 编写的打包器预构建依赖快 10-100 倍；
+- **源码：** 浏览器不能直接执行的非js代码(.jsx、.css、.vue等)，vite**只在浏览器请求相关源码的时候进行转换**，**以提供ESM源码**。
 
 ### 开发环境
 
@@ -1015,7 +1197,7 @@ Vite 通过原生 ES Modules 托管源代码，本质上是让浏览器来接管
 
 ------
 
-## 实现原理
+## ⚝实现原理
 
 ### ESbuild 编译
 
@@ -1045,15 +1227,15 @@ Vite 通过原生 ES Modules 托管源代码，本质上是让浏览器来接管
 
 传统的构建器虽然提供了热更新的能力，但是也会存在随着应用规模上升，热更新速度显著下降的问题。
 
-Vite 基于 ESM 按需提供源码文件，当一个文件被编辑后，Vite 只会重新编译并提供该文件。因此，无论项目规模多大，Vite 的热更新都可以保持快速更新。
+**Vite 基于 ESM 按需提供源码文件**，当一个文件被编辑后，Vite 只会重新编译并提供该文件。因此，无论项目规模多大，Vite 的热更新都可以保持快速更新。
 
-此外，Vite 合理利用浏览器缓存来加速页面加载，源码模块请求根据 `304 Not Modified` 进行协商缓存；依赖模块请求通过 `Cache-Control: max-age=31536000,immutable `进行强缓存，因此一旦缓存，不会再次请求。
+此外，**Vite 合理利用浏览器缓存来加速页面加载**，源码模块请求根据 `304 Not Modified` 进行协商缓存；依赖模块请求通过 `Cache-Control: max-age=31536000,immutable `进行强缓存，因此一旦缓存，不会再次请求。
 
 ### 生产环境仍需打包
 
 在生产环境使用 ESM 会存在大量额外网络请求问题，因此生产环境不太试用 ESM，最好的方式还是代码进行 tree-shaking、懒加载、和 chunk 分隔等。
 
-那么生产环境的构建为什么不直接使用 esbuild，而是使用 rollup 呢？这是因为 esbuild 在代码分隔、css 处理等方面的功能仍在开发中，rollup 在应用打包方面更加的成熟且灵活。
+那么生产环境的构建为什么不直接使用 esbuild，而是**使用 rollup** 呢？这是因为 esbuild 在代码分隔、css 处理等方面的功能仍在开发中，rollup 在应用打包方面更加的成熟且灵活。
 
 
 
@@ -1289,18 +1471,29 @@ client 代码会在启动服务时注入到客户端，用于客户端对于`Web
 
 - `Webpack`配置丰富使用极为灵活但上手成本高，`Vite`开箱即用配置高度集成
 - `Webpack`启动服务需利用Webpack对代码打包，结合webpack-dev-server提供静态资源服务,速度慢，`Vite`开发环境下基于浏览器原生ES6 Modules，无需对代码进行打包直接让浏览器使用。
-- `Webpack`热更新 HMR 时需要把改动模块及相关依赖全部编译,vite HMR时只需让浏览器重新请求该模块，同时利用浏览器的缓存（源码模块协商缓存，依赖模块强缓存）来优化请求；使得无论应用大小如何，HMR 始终能保持快速更新。****
+- `Webpack`热更新 HMR 时需要把改动模块及相关依赖全部编译,vite HMR时只需让浏览器重新请求该模块，同时利用浏览器的缓存（源码模块协商缓存，依赖模块强缓存）来优化请求；使得无论应用大小如何，HMR 始终能保持快速更新。
 - `Webpack`成熟稳定、资源丰富、大量实践案例，`Vite`实践较少
 - `Vite`使用`esbuild`编译，构建速度比`webpack`快几个数量级
 
-------
+## RollUp和Webpack对比/区别
+
+webpack致力于复杂SPA的模块化构建，优势在于:
+
+- 通过loader处理各种各样的资源依赖
+- HMR模块热替换
+- 代码按需加载
+- 提取公共模块
+
+rollup致力于打造性能出众的类库，有如下优势：
+
+- 编译出来的代码`可读性好`，打包后生成的bundle内容十分`干净`，没有什么多余的代码，只是将各个模块按照依赖顺序拼接起来，所有模块构建在一个函数内（Scope Hoisting）, 执行效率更高
+- `编译时依赖处理（rollup）自然比运行时依赖处理（webpack）性能更好`
+- 不用额外的配置就支持`tree-shaking`，而webapck需要配合`UglifyJsPlugin`来实现`tree-shaking`
 
 ## 兼容性
 
 - 默认目标浏览器是在`script`标签上支持原生 ESM 和 原生 ESM 动态导入
 - 可使用官方插件 `@vitejs/plugin-legacy`，转义成传统版本和相对应的`polyfill`
-
-------
 
 ### 未来探索
 

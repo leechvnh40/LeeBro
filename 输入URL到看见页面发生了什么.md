@@ -93,11 +93,11 @@ window.addEventListener('beforeunload', (event) => {
 })
 ```
 
-# 生产 HTTP 请求
+# 生成 HTTP 请求
 
 对 `URL` 进行解析之后，浏览器确定了 Web 服务器和文件名，接下来就是根据这些信息来生成 HTTP 请求消息了。
 
-![HTTP 的消息格式](https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/4.jpg)
+<img src="pics/http报文.png" style="zoom:50%;" />
 
 # 本地缓存查询
 
@@ -134,6 +134,10 @@ IP 下面的网卡驱动程序负责控制网卡硬件，而最下面的网卡�
 
 # 可靠传输TCP
 
+<img src="pics/TCP-HEADER.webp" alt="TCP-HEADER" style="zoom:50%;" />
+
+<img src="pics/三次握手.webp" alt="三次握手" style="zoom:50%;" />
+
 # TLS安全通信
 
 # 远程定位 IP
@@ -144,7 +148,7 @@ TCP 模块在执行连接、收发、断开等各阶段操作时，都需要**�
 
 我们先看看 IP 报文头部的格式：
 
-![IP 包头格式](https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/14.jpg)
+<img src="pics/ip.png" style="zoom:50%;" />
 
 在 IP 协议里面需要有**源地址 IP** 和 **目标地址 IP**：
 
@@ -161,11 +165,9 @@ TCP 模块在执行连接、收发、断开等各阶段操作时，都需要**�
 
 在 Linux 操作系统，我们可以使用 `route -n` 命令查看当前系统的路由表。
 
-![路由表](https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/15.jpg)
-
 举个例子，根据上面的路由表，我们假设 Web 服务器的目标地址是 `192.168.10.200`。
 
-![路由规则判断](https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/16.jpg)
+<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/16.jpg" alt="路由规则判断" style="zoom: 67%;" />
 
 1. 首先先和第一条目的子网掩码（`Genmask`）进行 **与运算**，得到结果为 `192.168.10.0`，但是第一个条目的 `Destination` 是 `192.168.3.0`，两者不一致所以匹配失败。
 2. 再与第二条目的子网掩码进行 **与运算**，得到的结果为 `192.168.10.0`，与第二条目的 `Destination 192.168.10.0` 匹配成功，所以将使用 `eth1` 网卡的 IP 地址作为 IP 包头的源地址。
@@ -178,7 +180,7 @@ TCP 模块在执行连接、收发、断开等各阶段操作时，都需要**�
 
 至此，网络包的报文如下图。
 
-![IP 层报文](https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/17.jpg)
+<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/17.jpg" alt="IP 层报文" style="zoom:50%;" />
 
 # 两点传输MAC
 
@@ -188,7 +190,7 @@ TCP 模块在执行连接、收发、断开等各阶段操作时，都需要**�
 
 MAC 头部是以太网使用的头部，它包含了接收方和发送方的 MAC 地址等信息。
 
-![MAC 包头格式](https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/18.jpg)
+<img src="pics/MAC头部.png" style="zoom: 80%;" />
 
 在 MAC 包头里需要**发送方 MAC 地址**和**接收方目标 MAC 地址**，用于**两点之间的传输**。
 
@@ -236,7 +238,7 @@ ARP 协议会在以太网中以**广播**的形式，对以太网所有的设备
 
 至此，网络包的报文如下图。
 
-![MAC 层报文](https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/21.jpg)
+<img src="https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E9%94%AE%E5%85%A5%E7%BD%91%E5%9D%80%E8%BF%87%E7%A8%8B/21.jpg" alt="MAC 层报文" style="zoom: 40%;" />
 
 > 此时，加上了 MAC 头部的数据包万分感谢，说道 ：“感谢 MAC 大佬，我知道我下一步要去哪了！我现在有很多头部兄弟，相信我可以到达最终的目的地！”。 带着众多头部兄弟的数据包，终于准备要出门了。
 
@@ -257,7 +259,7 @@ ARP 协议会在以太网中以**广播**的形式，对以太网所有的设备
 
 # 交换机
 
-下面来看一下包是如何通过交换机的。交换机的设计是将网络包**原样**转发到目的地。交换机工作在 MAC 层，也称为**二层网络设备**。
+下面来看一下包是如何通过交换机的。交换机的设计是将网络包**原样**转发到目的地。**交换机工作在 MAC 层**，也称为**二层网络设备**。
 
 > 交换机的包接收操作
 
@@ -284,7 +286,7 @@ ARP 协议会在以太网中以**广播**的形式，对以太网所有的设备
 
 地址表中找不到指定的 MAC 地址。这可能是因为具有该地址的设备还没有向交换机发送过包，或者这个设备一段时间没有工作导致地址被从地址表中删除了。
 
-这种情况下，交换机无法判断应该把包转发到哪个端口，只能将**包转发到除了源端口之外的所有端口上，无论该设备连接在哪个端口上都能收到这个包。**
+这种情况下，**交换机无法判断应该把包转发到哪个端口，只能将包转发到除了源端口之外的所有端口上，无论该设备连接在哪个端口上都能收到这个包。**
 
 这样做不会产生什么问题，因为以太网的设计本来就是将包发送到整个网络的，然后**只有相应的接收者才接收包，而其他设备则会忽略这个包**。
 
@@ -367,7 +369,7 @@ ARP 协议会在以太网中以**广播**的形式，对以太网所有的设备
 
 知道对方的 IP 地址之后，接下来需要通过 **`ARP` 协议根据 IP 地址查询 MAC 地址，并将查询的结果作为接收方 MAC 地址**。
 
-路由器也有 ARP 缓存，因此首先会在 ARP 缓存中查询，如果找不到则发送 ARP 查询请求。
+**路由器也有 ARP 缓存**，因此首先会在 ARP 缓存中查询，如果找不到则发送 ARP 查询请求。
 
 接下来是发送方 MAC 地址字段，这里填写输出端口的 MAC 地址。还有一个以太类型字段，填写 `0800` （十六进制）表示 IP 协议。
 
@@ -421,8 +423,4 @@ HTTP 响应报文也需要穿上 TCP、IP、MAC 头部，不过这次是源地�
 
 # 优化
 
-可从网络和渲染这两个方面进行展开
-
-1. 优化DNS查询：DNS预解析
-2. 优化TCP连接：可以通过请求头keep-alive来优化。
-3. 优化HTTP响应报文：通过CDN和Gzip压缩。
+查看 西奥项目(前端优化).md 文件

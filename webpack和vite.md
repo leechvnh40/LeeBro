@@ -1502,3 +1502,114 @@ rollup致力于打造性能出众的类库，有如下优势：
 - `Vite`在`Vue3.0`代替`vue-cli`，作为官方脚手架，会大大提高使用量。
 - `Vite2.0`推出后，已可以在实际项目中使用`Vite`。
 - 如果觉得直接使用`Vite`太冒险，又确实有`dev server`速度慢的问题需要解决，可以尝试用`Vite`单独搭建一套`dev server`
+
+
+
+
+
+# Git
+
+## 指令大全
+
+https://blog.csdn.net/qq_45649807/article/details/125621056?spm=1001.2101.3001.6650.12&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-12-125621056-blog-119875198.pc_relevant_aa_2&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-12-125621056-blog-119875198.pc_relevant_aa_2&utm_relevant_index=17
+
+## 框架介绍
+
+![img](http://www.ruanyifeng.com/blogimg/asset/2015/bg2015120901.png)
+
+git是一个常用的[分布式](https://so.csdn.net/so/search?q=分布式&spm=1001.2101.3001.7020)版本管理工具。
+
+- Workspace：开发者工作区
+- Index / Stage：暂存区/缓存区
+- Repository：仓库区（或本地仓库）
+- Remote：远程仓库
+
+![这里写图片描述](https://img-blog.csdn.net/20180912150918599?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM1NDE0Nzc5/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+
+## 列举工作中常用的几个git命令？
+
+新增文件的命令：git add file或者git add .
+提交文件的命令：git commit –m或者git commit –a
+查看工作区状况：git status –s
+拉取合并远程分支的操作：git fetch/git merge或者git pull
+查看提交记录命令：git reflog
+
+## 提交时发生冲突，如何解决？
+
+**为什么会产生冲突？**
+
+因为在合并分支的时候，master分支和dev分支恰好有人都修改了同一个文件，GIT不知道应该以哪一个人的文件为准，所以就产生了冲突了。 两个分支相同文件相同位置的的不同操作！
+
+**如何解决？**
+
+1. 发生冲突，在IDE里面一般都是对比本地文件和远程分支的文件，然后把远程分支上文件的内容手工修改到本地文件，然后再提交冲突的文件使其保证与远程分支的文件一致，这样才会消除冲突，然后再提交自己修改的部分。特别要注意下，修改本地冲突文件使其与远程仓库的文件保持一致后，需要提交后才能消除冲突，否则无法继续提交。必要时可与同事交流，消除冲突。
+2. 发生冲突，也可以使用命令：
+
+- 通过git stash命令，把工作区的修改提交到栈区，目的是保存工作区的修改；
+- 通过git pull命令，拉取远程分支上的代码并合并到本地分支，目的是消除冲突；
+- 通过git stash pop命令，把保存在栈区的修改部分合并到最新的工作空间中；
+
+## 新建git功能分支的步骤？
+
+```bash
+Git branch name     创建名字为name的branch
+
+Git checkout xxx_dev    切换到名字为xxx_dev的分支
+
+Git pull    从远程分支拉取代码到本地分支
+
+Git checkout -b main_furture_xxx    创建并切换到 main_furture_xxx 分支
+
+Git push origin main_furture_xxx    执行推送的操作，完成本地分支向远程分支的同步
+
+在执行git pull的时候，提示当前branch没有跟踪信息：
+
+01：git pull origin  远程分支名称
+
+02：git branch --set-upstream-to=origin/远程分支名称 本地分支名       （先建立远程分支与本地分支的连接，再pull）
+    git pull    再pull
+```
+
+## 说明GIT合并的两种方法以及区别
+
+Git代码合并有两种：**Git Merge** 和 **Git ReBase**
+
+Git Merge：这种合并方式是将两个分支的历史合并到一起，现在的分支不会被更改，它会比对双方不同的文件缓存下来，生成一个commit，去push。
+
+Git ReBase：这种合并方法通常被称为“衍合”。他是提交修改历史，比对双方的commit，然后找出不同的去缓存，然后去push，修改commit历史。
+
+## Git提交代码的步骤
+
+```bash
+git clone （这个是你新建本地git仓库，如已有可忽略此步）
+git pull    取回远程主机某个分支的更新，再与本地的指定分支合并。
+git status  查看当前状态
+git add + 文件
+git add -u + 路径：将修改过的被跟踪代码提交缓存
+git add -A + 路径: 将修改过的未被跟踪的代码提交至缓存
+git add -u com/breakyizhan/src
+将 com/breakyizhan/src 目录下被跟踪的已修改过的代码提交到缓存中
+git commit -m "修复XXbug"   推送修改到本地git库中
+git push    把当前提交到git本地仓库的代码推送到远程主机的某个远程分之上
+```
+
+## git pull、git merge、git fetch三个命令的区别？
+
+- git pull：是在本地仓库已经存在的情况下，将远程最新的commits抓取并合并到本地版本库的过程
+- git fetch： 从远程版本库抓取最新的commits，不会进行合并
+- git merge：合并分支
+
+所以git pull = git fetch + git merge
+
+## push之前一定要进行哪个操作？
+
+push之前一定要进行本地更新操作。使用`git pull`命令或者使用`git fetch`和`git merge`的命令组合。这时候，可能会出现版本冲突，如果出现的话，需要解决完冲突再进行代码push。
+
+## Git vs SVN
+
+**Git是分布式的，SVN是集中式的**；因为 Git 是分布式的，所以 Git 支持离线工作，在本地可以进行很多操作，包括接下来将要重磅推出的分支功能。而 SVN 必须联网才能正常工作。
+
+**Git复杂概念多，SVN简单易上手**；在易用性这方面，SVN 会好得多，简单易上手，对新手很友好。但是从另外一方面看，Git 命令多意味着功能多；
+
+**Git分支廉价，SVN分支昂贵**，Git 分支是指针指向某次提交，而 SVN 分支是拷贝的目录。这个特性使 Git 的分支切换非常迅速，且创建成本非常低。而且 Git 有本地分支，SVN 无本地分支。在实际开发过程中，经常会遇到有些代码没写完，但是需紧急处理其他问题，若我们使用 Git，便可以创建本地分支存储没写完的代码，待问题处理完后，再回到本地分支继续完成代码
+

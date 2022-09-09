@@ -15,6 +15,40 @@
 
 单页面不利于seo，不支持IE8以下，首屏加载时间长
 
+# 单页面应用的优缺点
+
+### 优点
+
+#### 良好的交互体验
+
+单页应用的内容的改变不需要重新加载整个页面，获取数据也是通过Ajax异步获取，没有页面之间的切换，就不会出现“白屏现象”,也不会出现假死并有“闪烁”现象，页面显示流畅
+
+#### 良好的前后端工作分离模式
+
+后端不再负责模板渲染、输出页面工作，后端API通用化，即同一套后端程序代码，不用修改就可以用于Web界面、手机、平板等多种客户端
+
+#### 减轻服务器压力
+
+单页应用相对服务器压力小，服务器只用出数据就可以，不用管展示逻辑和页面合成，吞吐能力会提高几倍
+
+### 缺点
+
+#### 首屏加载慢
+
+#### 不利于SEO
+
+解决方案：1，服务端渲染
+
+服务器合成完整的 html 文件再输出到浏览器
+
+2，页面预渲染
+
+3，路由采用h5 history模式
+
+#### 不适合开发大型项目
+
+大型项目中可能会涉及大量的DOM操作、复杂的动画效果，也就不适合使用Vue、react框架进行开发
+
 # 为什么说Vue是一个渐进式框架
 
 在核心库的基础上，vue现在已经有了一套完整的生态系统，我们可以添加Vuex，可以添加vue-router,可以添加任何你想添加的第三方库，这些都是互相独立的。
@@ -25,19 +59,55 @@
 
 # Vue跟React的异同点
 
+### 基本区别
+
 相同点：
 
-- 1.都使用了虚拟dom
-- 2.组件化开发
-- 3.都是单向数据流(父子组件之间，不建议子修改父传下来的数据)
-- 4.都支持服务端渲染
+1.都使用了虚拟dom
+
+2.组件化开发
+
+3.都是单向数据流(父子组件之间，不建议子修改父传下来的数据)
+
+4.都支持服务端渲染
 
 不同点：
 
-- 1.React的JSX，Vue的template
-- 2.数据变化，React手动(setState)，Vue自动(初始化已响应式处理，Object.defineProperty)
-- 3.React单向绑定，Vue双向绑定
-- 4.React的Redux，Vue的Vuex
+1.React的JSX，Vue的template
+
+2.数据变化，React手动(setState)，Vue自动(初始化已响应式处理，Object.defineProperty)
+
+3.React单向绑定，Vue双向绑定
+
+4.React的Redux，Vue的Vuex
+
+5.Vue为了更加简单易用，引入了指令、filter等概念以及大量的[option](https://www.zhihu.com/search?q=option&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A2282544794}) API,比如 watch、[computed](https://www.zhihu.com/search?q=computed&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A2282544794})等都是非常好用的；而React的API比较少， 如果你的JavaScript基础比较好，上手也是比较容易的
+
+
+
+### 更多
+
+**Vue 使用的是 web 开发者更熟悉的模板与特性**，Vue的API跟传统web开发者熟悉的模板契合度更高，比如Vue的单文件组件是以模板+JavaScript+CSS的组合模式呈现，它跟web现有的HTML、JavaScript、CSS能够更好地配合。**React 的特色在于[函数式编程](https://www.zhihu.com/search?q=函数式编程&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A1066629375})的理念和丰富的技术选型**。Vue 比起 React 更容易被前端工程师接受，这是一个直观的感受；React 则更容易吸引在 FP 上持续走下去的开发者。
+
+从**使用习惯和思维模式**上考虑，对于一个没有任何Vue和React基础的web开发者来说， Vue会更友好，更符合他的思维模式。React对于拥有函数式编程背景的开发者以及一些并不是以web为主要开发平台的开发人员而言，React更容易接受。这并不意味着他们不能接受Vue，Vue和React之间的差异对他们来说就没有web开发者那么明显。可以说，**Vue更加注重web开发者的习惯**。
+
+**实现上，Vue跟React的最大区别在于数据的reactivity，就是反应式系统上。**Vue提供[反应式](https://www.zhihu.com/search?q=反应式&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A1066629375})的数据，当数据改动时，界面就会自动更新，而React里面需要调用方法SetState。我把两者分别称为**Push-based**和**Pull-based**。所谓Push-based就是说，改动数据之后，数据本身会把这个改动推送出去，告知渲染系统自动进行渲染。在React里面，它是一个Pull的形式，用户要给系统一个明确的信号说明现在需要重新渲染了，这个系统才会重新渲染。两者并没有绝对的优劣之分，更多的也是思维模式和开发习惯的不同。
+
+两者不是完全互斥的，比如说在React里面，你也可以用一些第三方的库像MobX实现Push-based的系统，同时你也可以在Vue2.0里面，通过一些手段，比如把数据freeze起来，让数据不再具有反应式特点，或者通过手动调用组件更新的方法来做一个pull-based系统。所以两者并没有一个绝对的界限，只是默认的倾向性不同而已。
+
+
+
+**React 是手动挡，Vue 是自动挡。**
+
+Vue 是响应式的，React 是手动setState。
+
+有很多人说React 比Vue 难，其实难在哪了，React 本身不难，但是React 需要用到很多js原生写法，你不管干什么都要去自己手动去操作，所以js基础很重要。
+
+**而Vue 是一个渐进式框架**，你js基础可能不太好，但是也可以用vue 照着文档去开发一些业务，但是如果你想用好vue 你就要熟练vue 的这套语法，你得清楚各项配置。当你用熟练了，vue 是要比react 开发效率高的。
+
+React是一个用于构建用户界面的开源JavaScript库，主要用于构建UI，很多人认为 React 是 MVC 中的 V（视图）。React 拥有较高的性能，代码逻辑非常简单，越来越多的人已开始关注和使用它。
+
+react整体的思路就是[函数式](https://www.zhihu.com/search?q=函数式&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A2084639183})，所以推崇纯组件，数据不可变，单向数据流，当然需要双向的地方也可以做到，比如结合redux-form，而vue是基于可变数据的，支持双向绑定。react组件的扩展一般是通过高阶组件，而vue组件会使用mixin。vue内置了很多功能，而react做的很少，很多都是由社区来完成的，vue追求的是开发的简单，而react更在乎方式是否正确。
 
 #  MVVM是什么？和MVC有何区别呢？
 
@@ -3638,7 +3708,7 @@ function flushCallbacks() {
 
 获取元素属性，点击获取元素宽度。
 
-```html
+```vue
 <div id="app">
   <p ref="myWidth" v-if="showMe">{{ message }}</p>
   <button @click="getMyWidth">获取p元素宽度</button>
@@ -3657,7 +3727,7 @@ getMyWidth() {
 
 
 
-# Mixin 混入
+# Mixin混入
 
 > 混入 (mixin) 提供了一种非常灵活的方式，来分发 Vue 组件中的**可复用功能**。一个混入对象可以包含任意组件选项。当组件使用混入对象时，所有混入对象的选项将被“混合”进入该组件本身的选项。
 
@@ -4354,6 +4424,22 @@ vue中的scoped 通过在DOM结构以及css样式上加唯一不重复的标记:
 - 针对 `<slot>` 可以使用 `::v-slotted` 选择器
 - 可以使用 `::v-global` 注册全局样式
 - 使用上面的操作符，`<style>` 必须有 `scoped` 属性
+
+# vue中name的作用
+
+### **组件keep-alive**
+
+name可以用作include和exclude的值
+
+### **递归组件**
+
+递归组件，顾名思义，就是自己的内部实现又调用自己的组件
+
+其实，除了name选项是必须的之外，还有一点也是在实现递归组件要注意的，就是要防止无限递归，造成调用栈溢出，在不满足条件时跳出递归。
+
+### **用于 vue-devtools 调试工具方便定位**
+
+没有定义 name 的组件，会被识别为 <Anonymous component>（匿名组件）。
 
 
 
@@ -5327,47 +5413,6 @@ Vue3`移除一些不常用的 `API
 - 优化逻辑组织
 - 优化逻辑复用
 
-**逻辑复用**
-
-在`vue2`中，我们是通过`mixin`实现功能混合，如果多个`mixin`混合，会存在两个非常明显的问题：命名冲突和数据来源不清晰
-
-而通过`composition`这种形式，可以将一些复用的代码抽离出来作为一个函数，只要的使用的地方直接进行调用即可
-
-同样是上文的获取鼠标位置的例子
-
-```js
-import { toRefs, reactive, onUnmounted, onMounted } from 'vue';
-function useMouse(){
-    const state = reactive({x:0,y:0});
-    const update = e=>{
-        state.x = e.pageX;
-        state.y = e.pageY;
-    }
-    onMounted(()=>{
-        window.addEventListener('mousemove',update);
-    })
-    onUnmounted(()=>{
-        window.removeEventListener('mousemove',update);
-    })
-
-    return toRefs(state);
-}
-```
-
-组件使用
-
-```js
-import useMousePosition from './mouse'
-export default {
-    setup() {
-        const { x, y } = useMousePosition()
-        return { x, y }
-    }
-}
-```
-
-可以看到，整个数据来源清晰了，即使去编写更多的`hook`函数，也不会出现命名冲突的问题
-
 ## ⚝Vue3的性能提升
 
 ### 编译阶段
@@ -6291,8 +6336,6 @@ r.value++ // 打印 1
 
 ## ⚝Vue3响应式
 
-### 区别
-
 #### **响应式性能的提升**
 
 - 更高效的 `ref` 实现，读取提升约 `260%`，写入提升约 `50%`
@@ -6334,104 +6377,6 @@ Vue3 则是通过 ref 定义**普通类型响应式**和 reactive 定义**复杂
 2. 降低了**运行内存**的使用
 
    Vue3.0 以前生成响应式对象会对对象进行深度遍历，同时为每个 Key 生成一个 def 对象用来保存 Key 的所有依赖项，当 Key 对应的 Value 变化的时候通知依赖项进行 update。但如果这些依赖项在页面整个生命周期内不需要更新的时候，这时 def 对象收集的依赖项不仅没用而且还会占用内存，如果可以在初始化 data 的时候忽略掉这些不会变化的值就好了。Vue3.0 通过暴露的 **reactive** 方法，开发者可以**选择性的创建可观察对象**，达到减少依赖项的保存，降低了运行内存的使用。
-
-**Vue3中的写法**
-
-```js
-const { reactive , onMounted } = Vue
-setup(){
-    const state = reactive({
-        count:0,
-        todoList:[]
-    })
-    /* 生命周期mounted */
-    onMounted(() => {
-       console.log('mounted')
-    })
-    /* 增加count数量 */
-    function add(){
-        state.count++
-    } 
-    /* 减少count数量 */
-    function del(){
-        state.count--
-    }
-    /* 添加代办事项 */
-    function addTodo(id,title,content){
-        state.todoList.push({
-            id,
-            title,
-            content,
-            done:false
-        })
-    }
-    /* 完成代办事项 */
-    function complete(id){
-        for(let i = 0; i< state.todoList.length; i++){
-            const currentTodo = state.todoList[i] 
-            if(id === currentTodo.id){
-                state.todoList[i] = {
-                    ...currentTodo,
-                    done:true
-                } 
-                break
-            }
-        }
-    }
-    return {
-        state,
-        add,
-        del,
-        addTodo,
-        complete
-    }
-}
-```
-
-**Vue2中的写法**
-
-```js
-export default {
-    data(){
-        return{
-            count:0,
-            todoList:[] 
-        }
-    },
-    mounted(){
-        console.log('mounted')
-    }
-    methods:{
-        add(){
-            this.count++
-        },
-        del(){
-            this.count--
-        },
-        addTodo(id,title,content){
-           this.todoList.push({
-               id,
-               title,
-               content,
-               done:false
-           })
-        },
-        complete(id){
-            for(let i = 0; i< this.todoList.length; i++){
-                const currentTodo = this.todoList[i] 
-                if(id === currentTodo.id){
-                    this.todoList[i] = {
-                        ...currentTodo,
-                        done:true
-                    } 
-                    break
-                }
-            }
-        }
-    }
-}
-
-```
 
 #### **原理上的区别**
 
@@ -6496,15 +6441,7 @@ let nObj=new Proxy(obj,{
 
 **也就是说不会上来就递归遍历把所有用到没用到的都设置响应式，从而加快了首次渲染**
 
-**数组**
 
- Vue2 中源码 Observer 类中对数组进行了过滤，是担心如果数组长度几千上万，**性能消耗太大**，所以为了更好的操作数组并触发响应式，就**重写了会改变原数组的7个方法**，再通过 `ob.dep.notify()` 手动派发更新，（源码地址：`src/core/observer/array.js`可能会问源码）
-
-Vue3 中使用 Proxy，MDN中的描述
-
-> `target`: 被 Proxy 代理虚拟化的对象。它常被作为代理的存储后端。根据目标验证关于对象**不可扩展性或不可配置属性**的不变量（保持不变的语义）
-
-数组的 length 就是不可配置的属性，所以 **Proxy 天生就能监听数组长度变化**
 
 **依赖收集的区别**
 
@@ -6514,11 +6451,13 @@ Vue3 中是通过 `track` 收集依赖，通过 `trigger` 触发更新，本质�
 
 
 
-Vue3 是通过 Proxy 对数据实现 getter/setter 代理，从而实现响应式数据，然后在副作用函数中读取响应式数据的时候，就会触发 Proxy 的 getter，在 getter 里面把对当前的副作用函数保存起来，将来对应响应式数据发生更改的话，则把之前保存起来的副作用函数取出来执行。
+Vue3 是通过 Proxy 对数据实现 getter/setter 代理，从而实现响应式数据，然后在effect函数中读取响应式数据的时候，就会触发 Proxy 的 getter，在 getter 里面把对当前的effect函数保存起来，将来对应响应式数据发生更改的话，则把之前保存起来的effect函数取出来执行。
 
-具体是副作用函数里面读取响应式对象的属性值时，会触发代理对象的 getter，然后在 getter 里面进行一定规则的依赖收集保存操作。
+
 
 简单代码实现：
+
+`Reflect`是一个内置的对象，它提供拦截 JavaScript 操作的方法。Reflect不是一个函数对象，因此它是不可构造的。
 
 ```javascript
 // 使用一个全局变量存储被注册的副作用函数
@@ -6584,13 +6523,26 @@ function trgger(target, key) {
 
 
 
-
-
 #### Vue3 中是怎么监测数组的变化
 
-在 Vue2 是不可以通过数组下标对响应式数组进行设置和读取的，而 Vue3 中是可以的，数组中仍然有很多其他特别的读取和设置的方法，这些方法没经过特殊处理，是无法通过普通的 Proxy 中的 getter/setter 进行响应式处理的。
+ Vue2 中源码 Observer 类中对数组进行了过滤，是担心如果数组长度几千上万，**性能消耗太大**，所以为了更好的操作数组并触发响应式，就**重写了会改变原数组的7个方法**，再通过 `ob.dep.notify()` 手动派发更新，（源码地址：`src/core/observer/array.js`可能会问源码）
 
+**在 Vue2 是不可以通过数组下标对响应式数组进行设置和读取的，而 Vue3 中是可以的，**数组中仍然有很多其他特别的读取和设置的方法，这些方法没经过特殊处理，是无法通过普通的 Proxy 中的 getter/setter 进行响应式处理的。
 
+数组中对属性或元素进行读取的操作方法。
+
+- 通过索引访问数组的元素值
+- 访问数组的长度
+- 把数组作为对象，使用 for ... in 循环遍历
+- 使用 for ... of 迭代遍历数组
+- 数组的原型方法，如 concat、join、every、some、find、findIndex、includes 等
+
+数组中对属性或元素进行设置的操作方法。
+
+- 通过索引修改数组的元素值
+- 修改数组的长度
+- 数组的栈方法
+- 修改原数组的原型方法：splice、fill、sort 等
 
 Vue3 对数组实现代理时，**用于代理普通对象的大部分代码可以继续使用，但由于对数组的操作与对普通对象的操作存在很多的不同，那么也需要对这些不同的操作实现正确的响应式联系或触发响应。这就需要对数组原型上的一些方法进行重写。**
 
@@ -6901,7 +6853,7 @@ vue3.0可以根据业务需求引进不同的API方法。这里需要
 
 #### 储存对象与proxy
 
-上文中我们提及到。用Reactive处理过并返回的对象是一个proxy对象，假设存在很多组件，或者在一个组件中被多次reactive，就会有很多对proxy对象和它代理的原对象。为了能把proxy对象和原对象建立关系，vue3.0采用了WeakMap去储存这些对象关系。WeakMaps 保持了对键名所引用的对象的弱引用，即垃圾回收机制不将该引用考虑在内。只要所引用的对象的其他引用都被清除，垃圾回收机制就会释放该对象所占用的内存。也就是说，一旦不再需要，WeakMap 里面的键名对象和所对应的键值对会自动消失，不用手动删除引用。
+上文中我们提及到。用Reactive处理过并返回的对象是一个proxy对象，假设存在很多组件，或者在一个组件中被多次reactive，就会有很多对proxy对象和它代理的原对象。为了能把proxy对象和原对象建立关系，**vue3.0采用了WeakMap去储存这些对象关系**。WeakMaps 保持了对键名所引用的对象的弱引用，即垃圾回收机制不将该引用考虑在内。只要所引用的对象的其他引用都被清除，垃圾回收机制就会释放该对象所占用的内存。也就是说，一旦不再需要，WeakMap 里面的键名对象和所对应的键值对会自动消失，不用手动删除引用。
 
 ```js
 const rawToReactive = new WeakMap<any, any>()
@@ -6948,10 +6900,9 @@ export function reactive(target: object) {
     mutableCollectionHandlers /* 用于处理 Set, Map, WeakMap, WeakSet 类型 */
   )
 }
-复制代码
 ```
 
-**reactive**函数的作用就是通过createReactiveObject方法产生一个proxy,而且针对不同的数据类型给定了不同的处理方法。
+**reactive函数的作用就是通过createReactiveObject方法产生一个proxy,而且针对不同的数据类型给定了不同的处理方法。**
 
 ##### createReactiveObject
 
@@ -6987,10 +6938,9 @@ function createReactiveObject(
   /* 返回observed对象 */
   return observed
 }
-复制代码
 ```
 
-通过上面源码创建proxy对象的大致流程是这样的： ①首先判断目标对象有没有被proxy响应式代理过，如果是那么直接返回对象。 ②然后通过判断目标对象是否是[ Set, Map, WeakMap, WeakSet  ]数据类型来选择是用**collectionHandlers** ， 还是**baseHandlers->就是reactive传进来的mutableHandlers**作为proxy的hander对象。 ③最后通过真正使用new proxy来创建一个observed ，然后通过rawToReactive reactiveToRaw 保存 target和observed键值对。
+通过上面源码创建proxy对象的大致流程是这样的： ①首先判断目标对象有没有被proxy响应式代理过，如果是那么直接返回对象。 ②然后通过判断目标对象是否是[ Set, Map, WeakMap, WeakSet  ]数据类型来选择是用collectionHandlers ， 还是baseHandlers->就是reactive传进来的mutableHandlers作为proxy的hander对象。 ③最后通过真正使用new proxy来创建一个observed ，然后通过rawToReactive reactiveToRaw 保存 target和observed键值对。
 
 大致流程图：
 
@@ -7012,7 +6962,6 @@ export const mutableHandlers: ProxyHandler<object> = {
   has,
   ownKeys
 }
-复制代码
 ```
 
 vue3.0 用到了以上几个拦截器，我们在上节已经介绍了这几个拦截器的基本用法,首先我们对几个基本用到的拦截器在做一下回顾。
@@ -7029,7 +6978,6 @@ vue3.0 用到了以上几个拦截器，我们在上节已经介绍了这几个�
 
 ```js
 delete object.a
-复制代码
 ```
 
 是无法监测到的。
@@ -7064,7 +7012,7 @@ Object.keys(object)
 
 ##### 1 effect -> 新的渲染watcher
 
-vue3.0用effect副作用钩子来代替vue2.0watcher。我们都知道在vue2.0中，有渲染watcher专门负责数据变化后的从新渲染视图。vue3.0改用effect来代替watcher达到同样的效果。
+**vue3.0用effect副作用钩子来代替vue2.0watcher。我们都知道在vue2.0中，有渲染watcher专门负责数据变化后的从新渲染视图。vue3.0改用effect来代替watcher达到同样的效果。**
 
 我们先简单介绍一下mountComponent流程，后面的文章会详细介绍mount阶段的
 
@@ -7101,7 +7049,6 @@ vue3.0用effect副作用钩子来代替vue2.0watcher。我们都知道在vue2.0�
       optimized
     )   
   }
-复制代码
 ```
 
 上面是整个mountComponent的主要分为了三步，我们这里分别介绍一下每个步骤干了什么： **① 第一步: 创建component 实例 。** **② 第二步：初始化组件,建立proxy ,根据字符窜模版得到render函数。生命周期钩子函数处理等等** **③ 第三步：建立一个渲染effect，执行effect。**
@@ -7125,7 +7072,6 @@ vue3.0用effect副作用钩子来代替vue2.0watcher。我们都知道在vue2.0�
       //...省去的内容后面会讲到
     },{ scheduler: queueJob })
   }
-复制代码
 ```
 
 **为了让大家更清楚的明白响应式原理，我这只保留了和响应式原理有关系的部分代码。**
@@ -7148,7 +7094,6 @@ export function effect<T = any>(
   }
   return effect
 }
-复制代码
 ```
 
 **effect作用如下**
@@ -7184,7 +7129,6 @@ function createReactiveEffect<T = any>(
   effect.options = options
   return effect
 }
-复制代码
 ```
 
 createReactiveEffect
@@ -7195,7 +7139,7 @@ createReactiveEffect
 
 **①为什么要用effectStack数组来存放这里effect**
 
-##### 总结
+#### ⚝初始化总结/模板解析总结
 
 我们这里个响应式初始化阶段进行总结
 
@@ -7224,7 +7168,6 @@ const shallowGet = /*#__PURE__*/ createGetter(false, true)
 const readonlyGet = /*#__PURE__*/ createGetter(true)
 /* 只读的浅get */
 const shallowReadonlyGet = /*#__PURE__*/ createGetter(true, true)
-复制代码
 ```
 
 上面我们可以知道，对于之前讲的四种不同的建立响应式方法，对应了四种不同的get,下面是一一对应关系。
@@ -7262,7 +7205,6 @@ function createGetter(isReadonly = false, shallow = false) {
       : res
   }
 }
-复制代码
 ```
 
 这就是createGetter主要流程，**特殊的数据类型**和**ref**我们暂时先不考虑。 这里用了一些流程判断，我们用流程图来说明一下这个函数主要做了什么？
@@ -7280,12 +7222,11 @@ setup(){
      state
  }
 }
-复制代码
 ```
 
 **在初始化的时候，只有a的一层级建立了响应式，b并没有建立响应式，而当我们用state.a的时候，才会真正的将b也做响应式处理，也就是说我们访问了上一级属性后，下一代属性才会真正意义上建立响应式**
 
-这样做好处是， **1 初始化的时候不用递归去处理对象，造成了不必要的性能开销。** **2 有一些没有用上的state，这里就不需要在深层次响应式处理。*
+这样做好处是， **1 初始化的时候不用递归去处理对象，造成了不必要的性能开销。** 2 有一些没有用上的state，这里就不需要在深层次响应式处理。
 
 ##### 2 track->依赖收集器
 
@@ -7315,7 +7256,6 @@ export function track(target: object, type: TrackOpTypes, key: unknown) {
     activeEffect.deps.push(dep)
   }
 }
-复制代码
 ```
 
 里面主要引入了两个概念 **targetMap** 和 **depsMap**
@@ -7367,8 +7307,6 @@ createApp({
 })mount('#app')
 
 </script>
-
-复制代码
 ```
 
 我们用一幅图表示如上关系：
@@ -7410,14 +7348,11 @@ function componentEffect() {
         // ......
       }
 }
-
-
-复制代码
 ```
 
 **这边代码大致首先会通过renderComponentRoot方法形成树结构，这里要注意的是，我们在最初mountComponent的setupComponent方法中，已经通过编译方法compile编译了template模版的内容，state.a state.b等抽象语法树，最终返回的render函数在这个阶段会被触发，在render函数中在模版中的表达式 state.a state.b 点语法会被替换成data中真实的属性，这时候就进行了真正的依赖收集，触发了get方法。接下来就是触发生命周期 beforeMount ,然后对整个树结构重新patch,patch完毕后，调用mounted钩子**
 
-##### 依赖收集流程总结
+#### ⚝依赖收集总结
 
 ① 首先执行renderEffect ，赋值给activeEffect ，调用renderComponentRoot方法，然后触发render函数。
 
@@ -7439,7 +7374,6 @@ function componentEffect() {
 const set = /*#__PURE__*/ createSetter()
 /* 浅逻辑 */
 const shallowSet = /*#__PURE__*/ createSetter(true)
-复制代码
 ```
 
 set也是分两个逻辑，set和shallowSet,两种方法都是由createSetter产生，我们这里主要以set进行剖析。
@@ -7473,7 +7407,6 @@ function createSetter(shallow = false) {
     return result
   }
 }
-复制代码
 ```
 
 **createSetter的流程大致是这样的**
@@ -7530,8 +7463,9 @@ export function trigger(
   computedRunners.forEach(run) /* 依次执行computedRunners 回调*/
   effects.forEach(run) /* 依次执行 effect 回调（ TODO: 里面包括渲染effect ）*/
 }
-复制代码
 ```
+
+#### ⚝派发更新总结
 
 我们这里保留了trigger的核心逻辑
 
@@ -7545,13 +7479,13 @@ export function trigger(
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200809155749287.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3psX0FsaWVu,size_16,color_FFFFFF,t_70)
 
-#### 总结
+#### ⚝全部总结
 
 我们总结一下整个数据绑定建立响应式大致分为三个阶段
 
 1 初始化阶段： 初始化阶段通过组件初始化方法形成对应的**proxy**对象，然后形成一个负责渲染的effect。
 
-2 get依赖收集阶段：通过解析template，替换真实data属性，来触发get,然后通过**stack**方法，通过proxy对象和key形成对应的deps，将负责渲染的effect存入deps。（这个过程还有其他的effect，比如watchEffect存入deps中 ）。
+2 get依赖收集阶段：通过解析template，替换真实data属性，来触发get,然后通过**track**方法，通过proxy对象和key形成对应的deps，将负责渲染的effect存入deps。（这个过程还有其他的effect，比如watchEffect存入deps中 ）。
 
 3 set派发更新阶段：当我们 this[key] = value 改变属性的时候，首先通过**trigger**方法，通过proxy对象和key找到对应的deps，然后给deps分类分成computedRunners和effect,然后依次执行，如果需要**调度**的，直接放入调度。
 
@@ -7567,25 +7501,23 @@ tree-sharking 即在构建工具构建后消除程序中无用的代码，来减
 
 Vue3.x 在考虑到 `tree-shaking`的基础上重构了全局和内部 API, 表现结果就是现在的全局 API 需要通过 `ES Module`的引用方式进行具名引用， 比如在 Vue2.x 中，我们要使用 `nextTick`:
 
-```
+```vue
 // vue2.x
 import Vue from "vue"
 
 Vue.nextTick(()=>{
     ...
 })
-复制代码
 ```
 
 `Vue.nextTick()` 是一个从 Vue 对象直接暴露出来的全局 API，其实 `$nextTick()` 只是 `Vue.nextTick()` 的一个简易包装，只是为了方便而把后者的回调函数的 `this` 绑定到了当前的实例。虽然我们借助`webpack`的`tree-shaking`, 但是不管我们实际上是否使用`Vue.nextTick()`, 最终都会进入我们的生产代码， 因为 Vue 实例是作为单个对象导出的， 打包器无法坚持出代码总使用了对象的哪些属性。 在 Vue3.x 中改写成这样：
 
-```
+```vue
 import { nextTick } from "vue"
 
 nextTick(() =>{
     ...
 })
-复制代码
 ```
 
 ### 受影响的 API

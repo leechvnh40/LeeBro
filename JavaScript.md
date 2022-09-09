@@ -310,7 +310,7 @@ console.log('更深层的对象指向同一地址', obj.person == newObj.person)
 
 # 为什么0.1+0.2 != 0.3 
 
-在小数点运算时，JavaScript将隐式的采取[IEEE754二进制浮点运算](https://link.zhihu.com/?target=https%3A//www.h-schmidt.net/FloatConverter/IEEE754.html)。而不是我们想象中的十进制运算。而十进制和二进制转换时，0.1 和 0.2 在转换成二进制后会无限循环，超过 64 位的位数会被截掉，出现了精度的损失。
+在小数点运算时，JavaScript将隐式的采取**IEEE754二进制浮点运算**。而不是我们想象中的十进制运算。而十进制和二进制转换时，0.1 和 0.2 在转换成二进制后会无限循环，超过 64 位的位数会被截掉，出现了精度的损失。
 
 解决方法1：
 
@@ -4442,9 +4442,9 @@ const someAsyncThing = function() {
 
 `catch()`方法之中，还能再抛出错误，通过后面`catch`方法捕获到
 
-#### *finally()*
+#### finally()
 
-*`finally()`方法用于指定不管 Promise 对象最后状态如何，都会执行的操作*
+`finally()`方法用于指定不管 Promise 对象最后状态如何，都会执行的操作
 
 ```js
 promise
@@ -4527,9 +4527,7 @@ Promise.all([p1, p2])
 const p = Promise.race([p1, p2, p3]);
 ```
 
-只要`p1`、`p2`、`p3`之中有一个实例**率先**改变状态，`p`的状态就跟着改变
-
-率先改变的 Promise 实例的返回值则传递给`p`的回调函数
+`.race()` 的作用也是接收一组异步任务，然后并行执行异步任务，只保留取一个最快执行完成的异步操作的结果，**其他的方法仍在执行，不过执行结果会被抛弃。**
 
 ```js
 const p = Promise.race([
@@ -4631,6 +4629,63 @@ Promise.any([pErr, pSlow, pFast]).then((value) => {
 })
 // 期望输出: "很快完成"
 ```
+
+
+
+## Promise 常见的应用场景
+
+### Promise.all
+
+应用场景1：多个请求结果合并在一起
+
+> 具体描述：一个页面，有多个请求，我们需求所有的请求都返回数据后再一起处理渲染
+
+应用场景2：合并请求结果并处理错误
+
+> 有时候页面挂掉了，可能因为接口异常导致，或许只是一个无关紧要的接口挂掉了。那么一个接口挂掉了为什么会导致整个页面无数据呢？Promise.all告诉我们，如果参数中 promise 有一个失败（rejected），此实例回调失败（reject），就不再执行then方法回调，以上用例 正好可以解决此种问题
+
+应用场景3：验证多个请求结果是否都是满足条件
+
+> 描述：在一个微信小程序项目中，做一个表单的输入内容安全验证，调用的是云函数写的方法，表单有多7个字段需要验证，都是调用的一个 内容安全校验接口，全部验证通过则 可以 进行正常的提交
+
+### Promise.race
+
+应用场景1：图片请求超时
+
+```js
+Promise
+.race([requestImg(), timeout()])
+.then(function(results){
+    console.log(results);
+})
+.catch(function(reason){
+    console.log(reason);
+});
+```
+
+应用场景2：请求超时提示
+
+```js
+Promise.race([
+    request(),
+    timeout()
+])
+.then(res=>{
+    console.log(res)
+}).catch(err=>{
+    console.log(err)//网络不佳
+})
+```
+
+### Promise.prototype.then
+
+应用场景1：下个请求依赖上个请求的结果
+
+> 描述：类似微信小程序的登录，首先需要 执行微信小程序的 登录 wx.login 返回了code，然后调用后端写的登录接口，传入 code ，然后返回 token ，然后每次的请求都必须携带 token，即下一次的请求依赖上一次请求返回的数据
+
+应用场景2：中间件功能使用
+
+> 描述：接口返回的数据量比较大，在一个then 里面处理 显得臃肿，多个渲染数据分别给个then，让其各司其职
 
 
 
@@ -5002,7 +5057,7 @@ ulDom[0].addEventListener('click', function(event){
 })
 ```
 
-我们现在有一个这样的列表，我想监听所有的`<li>`标签，`<li>`标签我这里只列了五个，但实际业务中这里有可能会循环出成千上万个`<li>`标签。如果我们给每个`<li>`都绑定事件，会极大的影响页面性能，这个时候我们就可以使用`事件委托`来进行优化。
+我们现在有一个这样的列表，我想监听所有的`<li>`标签，`<li>`标签我这里只列了五个，但实际业务中这里有可能会循环出成千上万个`<li>`标签。如果我们给每个`<li>`都绑定事件，会**极大的影响页面性能**，这个时候我们就可以使用`事件委托`来进行优化。
 
 总结一下事件委托的优化：
 
@@ -5495,6 +5550,8 @@ setInterval(fn(), N);
 
 **SetInterval实现**
 
+主要思想就是递归调用自身
+
 ```js
 let timeMap = {}
 let id = 0 // 简单实现id唯一
@@ -5532,6 +5589,156 @@ const myClearInterval = (id) => {
   delete timeMap[id]
 }
 ```
+
+
+
+# 前端如何实现高精度定时器
+
+### 用setTimeout代替setInterval
+
+setInterval 有**两个缺点**：
+
+- 使用 setInterval 时，**某些间隔会被跳过**；
+- 可能多个定时器**会连续执行**；
+
+可以这么理解：**每个 setTimeout 产生的任务会直接 push 到任务队列中；而 setInterval 在每次把任务 push 到任务队列前，都要进行一下判断(看上次的任务是否仍在队列中，如果有则不添加，没有则添加)。**
+
+因而我们一般用 setTimeout 模拟 setInterval，来规避掉上面的缺点。
+
+主要思想就是递归调用自身
+
+```js
+let timeMap = {}
+let id = 0 // 简单实现id唯一
+const mySetInterval = (cb, time) => {
+  let timeId = id // 将timeId赋予id
+  id++ // id 自增实现唯一id
+  let fn = () => {
+    cb()
+    timeMap[timeId] = setTimeout(() => {
+      fn()
+    }, time)
+  }
+  timeMap[timeId] = setTimeout(fn, time)
+  return timeId // 返回timeId
+}
+```
+
+`id` 值是全局变量 `timeMap` 里的一个键的内容；
+
+为了存每个定时器的id，用闭包；
+
+每次更新 `setTimeout` 的 `id` 并不是去更新 `timeId`，相应的，我们去更新 `timeMap[timeId]` 里的值。
+
+为了保证 `timeId` 的唯一性，在这里我简单用了一个自增的全局变量 `id` 来保证唯一。
+
+### requestAnimationFrame
+
+```
+window.requestAnimationFrame(callback);
+```
+
+1. requestAnimationFrame 的回调执行间隔和浏览器刷新频率有关。浏览器一秒刷新60次，那么执行间隔是 `1 / 60 = 16.7ms`；如果因为性能原因，浏览器进行降频，那么间隔时间会相应改变。
+2. 相对于setInterval的好处在于“踩点”。回调一定在浏览器渲染前执行，页面变化刚好可以体现出来。这是setInterval设置相同时间间隔也无法做到的。
+3. 但它存在和setInterval相同的问题：回调函数仍在主线程中执行，也会被阻塞，回调中也需要进行校正。浏览器后台运行时，有可能会被停掉。
+
+重绘之前调用，甚至可以每秒 60 次，和刷新率一样，看起来不错，可以解决 UI 延迟更新的问题。 与此同时我们 UI 的更新的精确度，来到了 16.67ms。
+
+```js
+let start = Date.now();
+function timer1() {
+  let gaps = Date.now() - start;
+  let seconds = Math.floor(gaps / 1000);
+  updateUI(seconds);
+  requestAnimationFrame(timer1);
+}
+timer1();
+```
+
+但是我们计时器是 1 秒更新一次UI，这就意味着浪费了 59 次。可不可以不让 `requestAnimationFrame` 不 60 秒调用一次呢？对你想的没错，`setTimeout`
+
+### 两者结合
+
+```js
+function interval(ms, callback) {
+  const start = document.timeline
+    ? document.timeline.currentTime
+    : performance.now();
+    
+  function timer1(time) {
+    const gaps = time - start;
+    const seconds = Math.round(gaps / ms);
+    callback(seconds);
+    console.log(seconds);
+    const targetNext = (seconds + 1) * ms + start; // 算出下次interval开始的时间
+    const delay = document.timeline
+      ? document.timeline.currentTime
+      : performance.now(); // 取出更新完UI的时间
+    setTimeout(
+      () => {
+        requestAnimationFrame(timer1);
+      },
+      targetNext - delay // 算出距离下次interval开始时间
+    );
+  }
+  timer1(start);
+}
+
+interval(1000, updateUI);
+```
+
+### web worker
+
+通过新建一个线程来执行回调，这样回调函数的执行不受主线程执行队列的阻塞，比setInterval更精确一些。
+
+计算完成后，最终仍要通知主线程执行后续操作。
+
+
+
+### 利用服务端修正时间进行倒计时
+
+秒杀场景下，需要服务端修正客户端倒计时时间。
+
+原理是利用一个计时器计时，另一个计时器更新时间变量，对时间进行修正。
+
+demo 如下
+
+```typescript
+const interval = 1000  // 计时间隔
+const debounce = 3000  // 修正时间，请求接口间隔
+const endTime = Date.now() + 5 * 1000  // 计时终点
+let now = Date.now()  // 初始时间
+let timer1: any = null  // 倒计时计时器
+let updateNowTimer: any = null  // 请求接口计时器
+
+// 倒计时计时器
+timer1 = setInterval(() => {
+  now = now + interval
+  const leftT = Math.round((endTime - now) / 1000)
+
+  if (leftT < 0) {
+    clearInterval(timer1)
+    clearInterval(updateNowTimer)
+    return
+  }
+}, interval)
+
+// 模拟请求接口，更新 now 值
+updateNowTimer = setInterval(() => {
+  new Promise((resolve) => {
+    setTimeout(() => {
+      now = Date.now()
+      resolve(void 0)
+    }, 1000)
+  })
+}, debounce)
+```
+
+当有多个倒计时实例时，只需要在 `updateNowTimer` 中更新多个实例的 now 值即可。
+
+demo 中除了代码不优雅，不好管理计时器外，还存在着一些问题，比如没有考虑多个实例下，何时清除`updateNowTimer` 计时器等问题。
+
+
 
 # ⚝webWorker
 
@@ -5877,8 +6084,6 @@ console.log('DOMContentLoaded回调') // 不兼容老的浏览器，兼容写法
 
 
 # ES6专区
-
-### *[ECMAScript 6 入门阮一峰](https://es6.ruanyifeng.com/)*
 
 ## const、let和var的区别
 
@@ -6556,23 +6761,17 @@ let set = new Set(['red', 'green', 'blue']);
 for (let item of set.keys()) {
   console.log(item);
 }
-// red
-// green
-// blue
+// red green blue
 
 for (let item of set.values()) {
   console.log(item);
 }
-// red
-// green
-// blue
+// red green blue
 
 for (let item of set.entries()) {
   console.log(item);
 }
-// ["red", "red"]
-// ["green", "green"]
-// ["blue", "blue"]
+// ["red", "red"] ["green", "green"] ["blue", "blue"]
 ```
 
 上面代码中，`entries`方法返回的遍历器，同时包括键名和键值，所以每次输出一个数组，它的两个成员完全相等。
@@ -6592,9 +6791,7 @@ let set = new Set(['red', 'green', 'blue']);
 for (let x of set) {
   console.log(x);
 }
-// red
-// green
-// blue
+// red green blue
 ```
 
 **（2）`forEach()`**
@@ -6681,7 +6878,7 @@ dedupe([1, 1, 2, 3]) // [1, 2, 3]
 
 注：`NaN`和`undefined`也可以存储在Set中。所有`NaN`值都是相等的(即NaN被认为与NaN相同，即使`NaN !== NaN`)。
 
-##### 并集（Union）、交集（Intersect）和差集（Difference）。
+##### 并集、交集和差集
 
 ```js
 let a = new Set([1, 2, 3]);
@@ -6790,6 +6987,14 @@ Map和Set中对象的引用都是强类型化的，并不会允许垃圾回收�
 
 注意：**浏览器的垃圾回收可能不是立刻执行**。
 
+
+
+### Set和WeakSet的区别
+
+- Set允许存储任何类型的唯一值，无论是**基本类型**或者是**对象引用**。WeakSet 中的元素**只能是对象**，不能是其他类型的值。
+- Set是强引用的；WeakSet 中的对象都是弱引用，即垃圾回收机制不考虑 WeakSet 对该对象的引用，也就是说，如果该对象不在被其他变量引用，那么垃圾回收机制就会自动回收该对象所占用内存，所以只要 WeakSet 成员对象在外部消失，它们在 WeakSet 里面的引用就会自动消失。
+- 由于 WeakSet 内部有多少个成员，取决于垃圾回收机制有没有运行，运行前后很可能成员个数是不一样的，而垃圾回收机制何时运行是不可预测的，因此 **ES6 规定 WeakSet 不可遍历，也没有size属性**。
+
 ### Map
 
 **`Map` 对象保存键值对，并且能够记住键的原始插入顺序。任何值(对象或者基础类型) 都可以作为一个键或一个值。**
@@ -6823,7 +7028,6 @@ let map = new Map()
   .set(1, 'a')
   .set(2, 'b')
   .set(3, 'c');
-复制代码
 ```
 
 **（3）Map.prototype.get(key)**
@@ -6899,8 +7103,6 @@ map.forEach(function(value, key, map) {
 上面代码中，`forEach`方法的回调函数的`this`，就指向`reporter`。
 
 ### WeakMap
-
-#### 含义
 
 `WeakMap`结构与`Map`结构类似，也是用于生成键值对的集合。
 
@@ -6998,7 +7200,6 @@ document.getElementById('logo').addEventListener('click', function() {
   let logoData = myWeakmap.get(document.getElementById('logo'));
   logoData.timesClicked++;
 }, false);
-复制代码
 ```
 
 上面代码中，`document.getElementById('logo')`是一个 DOM 节点，每当发生`click`事件，就更新一下状态。我们将这个状态作为键值放在 WeakMap 里，对应的键名就是这个节点对象。一旦这个 DOM 节点删除，该状态就会自动消失，不存在内存泄漏风险。
@@ -7054,6 +7255,17 @@ foo.bar = foo
 相比之下，原生的 WeakMap 持有的是每个键对象的“弱引用”，这意味着在没有其他引用存在时**垃圾回收能正确进行**。原生 WeakMap 的结构是特殊且有效的，其用于映射的 key 只有在其没有被回收时才是有效的。
 
 基本上，如果你要往对象上添加数据，又不想干扰垃圾回收机制，就可以使用 WeakMap。
+
+
+
+### Map和WeakMap的区别
+
+- Map允许存储任何类型的唯一值，无论是**基本类型**或者是**对象引用**，WeakMap 只接受对象作为键名（不包括null）
+
+- **Map是强引用的；WeakMap是弱引用**，也就是说，如果该对象不在被其他变量引用，那么垃圾回收机制就会自动回收该对象所占用内存，所以只要 WeakMap 成员对象在外部消失，它们在 WeakMap 里面的引用就会自动消失。
+- 由于 WeakMap 内部有多少个成员，取决于垃圾回收机制有没有运行，运行前后很可能成员个数是不一样的，而垃圾回收机制何时运行是不可预测的，因此 **ES6 规定 WeakMap 不可遍历**。**也无法清空**，即不支持`clear`方法。因此，`WeakMap`只有四个方法可用：`get()`、`set()`、`has()`、`delete()`。
+
+
 
 ## *Iterator*
 

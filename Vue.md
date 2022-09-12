@@ -201,7 +201,7 @@ Vue2 中的 `v-model`，它主要用于**表单元素和自定义组件上**。`
 
 - 原理:语法糖
 
-```ini
+```vue
 <input v-bind:value="something" v-on:input="something=$event.target.value">
 ```
 
@@ -295,7 +295,7 @@ Vue 提供一个 `.sync` 的修饰符，效果跟 `v-model` 一样，也是便�
 <my-input :title="msg" @update:title="msg = $event"></my-input>
 ```
 
-但此时可以使用 `.sync` 修饰符来简化：
+但此时可以使用 `.sync` 修饰符来简化： 
 
 ```html
 <my-input :title.sync="msg"></my-input>
@@ -3155,7 +3155,7 @@ beforeCreate， created， beforeMount， mounted
 一般 created/beforeMount/mounted 皆可.
  比如如果你要操作 DOM , 那肯定 mounted 时候才能操作.
 
-## 组件生命周期
+## ⚝组件生命周期
 
 生命周期（父子组件） 父组件beforeCreate --> 父组件created --> 父组件beforeMount --> 子组件beforeCreate --> 子组件created --> 子组件beforeMount --> **子组件 mounted --> 父组件mounted** -->父组件beforeUpdate -->子组件beforeDestroy--> 子组件destroyed --> 父组件updated
 
@@ -5364,54 +5364,66 @@ Vuex 实现了**更加友好的响应式状态**之外，还禁止了 vuex 里�
 
 # Vue3
 
-## Vue3的优化
+## Vue2和Vue3的区别/Vue3的优化
 
-### 更小
-
-Vue3`移除一些不常用的 `API
-
-引入`tree-shaking`，可以将无用模块“剪辑”，仅打包需要的，使打包的整体体积变小了
-
-### 更快
-
-主要体现在编译方面：
+#### 编译优化
 
 - diff算法优化
 - 静态提升
 - 事件监听缓存
 - SSR优化
 
-### 更友好
+#### 响应式优化
 
-`vue3`在兼顾`vue2`的`options API`的同时还推出了`composition API`，大大增加了代码的逻辑组织和代码复用能力
+Vue2: `object.defineProperty()`
 
-### 优化方案
+Vue3: `Proxy`  惰性监听
 
-`vue3`从很多层面都做了优化，可以分成三个方面：
+#### 体积优化
 
-- 源码
-- 性能
-- 语法 API
+- Vue3`移除一些不常用的 `API
+
+- 引入`tree-shaking`，可以将无用模块“剪辑”，仅打包需要的，使打包的整体体积变小了
+
+#### 语法API的变化
+
+`composition API`，其两大显著的优化：
+
+- 优化逻辑组织
+- 优化逻辑复用
+
+#### 生命周期的变化
+
+<img src="pics/vue3生命周期.png"  />
+
+ `beforeCreate`和`created`被`setup`替换了（但是 Vue3 中你仍然可以使用， 因为 Vue3 是向下兼容的， 也就是你实际使用的是 vue2 的)。其次，**钩子命名都增加了`on`**; Vue3.x 还新增用于调试的钩子函数`onRenderTriggered`和`onRenderTricked` ，**Vue3.x 中的钩子需要从 vue 中导入，在 setup 方法中注册钩子回调**
 
 #### 源码
 
 源码可以从两个层面展开：
 
 - 源码管理
-- TypeScript
+- TypeScript支持
 
-#### 性能
 
-- 体积优化
-- 编译优化
-- 数据劫持优化
 
-#### 语法 API
+#### 其他Api和功能的改动
 
-这里当然说的就是`composition API`，其两大显著的优化：
+- `Global API`
 
-- 优化逻辑组织
-- 优化逻辑复用
+- 模板指令
+
+- 组件
+
+- 渲染函数
+
+- `vue-cli 从 v4.5.0 `开始提供 Vue 3 预设
+
+- `Vue Router 4.0` 提供了 Vue 3 支持，并有许多突破性的变化
+
+- `Vuex 4.0` 提供了 Vue 3 支持，其 API 与 2.x 基本相同
+
+  
 
 ## ⚝Vue3的性能提升
 
@@ -6210,9 +6222,7 @@ export default {
 </script>
 ```
 
-### 生命周期的变化
 
-![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/de01e730e563406cbf3399861fa23aa4~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp) 从图中我们可以看到 Vue3.0 新增了`setup`，这个在前面我们也详细说了， 然后是将 Vue2.x 中的`beforeDestroy`名称变更成`beforeUnmount`; `destroyed` 表更为 `unmounted`，作者说这么变更纯粹是为了更加语义化，因为一个组件是一个`mount`和`unmount`的过程。其他 Vue2 中的生命周期仍然保留。 上边`生命周期图`中并没包含全部的生命周期钩子， 还有其他的几个， 全部生命周期钩子如图所示： ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/3eadd1ec0ac94343951ae2453cf41fce~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp) 我们可以看到`beforeCreate`和`created`被`setup`替换了（但是 Vue3 中你仍然可以使用， 因为 Vue3 是向下兼容的， 也就是你实际使用的是 vue2 的)。其次，**钩子命名都增加了`on`**; Vue3.x 还新增用于调试的钩子函数`onRenderTriggered`和`onRenderTricked` ，**Vue3.x 中的钩子需要从 vue 中导入，在 setup 方法中注册钩子回调**
 
 ## reactive()详解
 

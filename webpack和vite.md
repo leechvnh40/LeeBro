@@ -1087,6 +1087,118 @@ module.exports = {
 
 
 
+## webpack配置
+
+基础的配置可以分为以下几个方面： `entry` 、 `output` 、 `mode` 、 `resolve` 、 `module` 、 `optimization` 、 `plugin` 、 `source map` 、 `performance`
+
+#### 配置入口 entry
+
+**1、单入口和多入口**
+
+**2、动态配置入口文件**
+
+动态配置入口文件
+
+```
+// 使用 glob 等工具使用若干通配符，运行时获得 entry 的条目
+module.exports = {
+  entry: glob.sync('./project/**/index.js').reduce((acc, path) => {
+    const entry = path.replace('/index.js', '')
+    acc[entry] = path
+    return acc
+  }, {}),
+}
+```
+
+动态打包某一子项目
+
+#### 配置出口 output
+
+`filename` ：`[name]` 为 entry 配置的 `key`，除此之外，还可以是 `[id]` （内部块 id ）、 `[hash]`、`[contenthash]` 等。
+
+**1. 浏览器缓存与 hash 值**
+
+对于我们开发的每一个应用，浏览器都会对静态资源进行缓存，如果我们更新了静态资源，而没有更新静态资源名称（或路径），浏览器就可能因为缓存的问题获取不到更新的资源。在我们使用 webpack 进行打包的时候，webpack 提供了 hash 的概念，所以我们可以使用 hash 来打包。
+
+**2. 打包成库**
+
+#### 配置模式 mode（webpack4）
+
+**1. production**
+
+**2. development**
+
+**3. none**
+
+**production 模式下给你更好的用户体验：**
+
+- 较小的输出包体积
+- 浏览器中更快的代码执行速度
+- 忽略开发中的代码
+- 不公开源代码或文件路径
+- 易于使用的输出资产
+
+**development 模式会给予你最好的开发体验：**
+
+- 浏览器调试工具
+- 快速增量编译可加快开发周期
+- 运行时提供有用的错误消息
+
+尽管 webpack4 在尽力让零配置做到更多，但仍然是有限度的，大多数情况下还是需要一个配置文件。我们可以在项目的初期使用零配置，在后期业务复杂的时候再配置。
+
+#### 配置解析策略 resolve
+
+自定义寻找依赖模块时的策略
+
+#### 配置解析和转换文件的策略 module
+
+通常是配置 module.rules 里的 Loader
+
+#### 配置优化 optimization（webpack4）
+
+主要涉及两方面的优化：
+
+- 最小化包
+- 拆包
+
+#### 配置 plugin
+
+#### 配置devtool：source map
+
+配置 webpack 如何生成 Source Map，用来增强调试过程。不同的值会明显影响到构建(build)和重新构建(rebuild)的速度：
+
+生产环境：默认为 `null` ，一般不设置（ `none` ）或 `nosources-source-map`
+
+开发环境：默认为 `eval` ，一般设置为 `eval` 、 `cheap-eval-source-map` 、`cheap-module-eval-source-map`
+
+**策略为：**
+
+- **使用 cheap 模式可以大幅提高 souremap 生成的效率。** 没有列信息（会映射到转换后的代码，而不是映射到原始代码），通常我们调试并不关心列信息，而且就算 source map 没有列，有些浏览器引擎（例如 v8） 也会给出列信息。
+- **使用 eval 方式可大幅提高持续构建效率。**参考官方文档提供的速度对比表格可以看到 eval 模式的编译速度很快。
+- **使用 module 可支持 babel 这种预编译工具**（在 webpack 里做为 loader 使用）。
+
+如果默认的 webpack `minimizer` 已经被重定义(例如 `terser-webpack-plugin` )，你必须提供 `sourceMap：true` 选项来启用 source map 支持。
+
+#### 配置性能 performance
+
+#### 配置其它
+
+1.watch 与 watchOptions
+
+监视文件更新，并在文件更新时重新编译：
+
+2.externals
+
+3.target
+
+构建目标，用于为 webpack 指定一个环境：
+
+4.cache
+
+5.name
+
+配置的名称，用于加载多个配置：
+
 ## 网络教程
 
 [官方指南](https://www.webpackjs.com/guides/) 还得是官方教程
